@@ -74,6 +74,7 @@ class WHIDForm(QtWidgets.QDialog):
         self.allDialog = QtWidgets.QDialog(self)
         self.allDialog.setModal(True)
         self.allDialog.resize(600, 600)
+        self.allDialog.setWindowTitle('All Days')
         self.allLayout = QtWidgets.QVBoxLayout(self.allDialog)
         self.allText = QtWidgets.QTextEdit()
         self.allLayout.addWidget(self.allText)
@@ -111,6 +112,7 @@ class WHIDForm(QtWidgets.QDialog):
             previous = new_entry
         self.root_entry = root
         self.populateDay(now)
+        self.processData()
         self.processTimer.start(process_interval)
 
     def processData(self):
