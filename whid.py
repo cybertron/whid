@@ -143,12 +143,13 @@ class WHIDForm(QtWidgets.QDialog):
         new_text = entryToText(self.root_entry).rstrip()
         # We don't care about trailing whitespace differences
         current = self.mainInput.toPlainText().rstrip()
-        compare_text = new_text.replace('<br>', '\n')
-        compare_text = compare_text.replace('<b>', '')
-        compare_text = compare_text.replace('</b>', '')
-        if compare_text.rstrip() != current:
+        plain_text = new_text
+        plain_text = plain_text.replace('<b>', '')
+        plain_text = plain_text.replace('</b>', '')
+        plain_text = plain_text.replace('<br>', '\n')
+        if plain_text.rstrip() != current:
             self.ignoreInputChange = True
-            self.mainInput.setHtml(new_text)
+            self.mainInput.setPlainText(plain_text)
 
     def populateDay(self, now):
         # Called each time the input changes
