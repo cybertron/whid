@@ -57,6 +57,8 @@ class WHIDForm(QtWidgets.QDialog):
         self.mainInput = QtWidgets.QTextEdit()
         self.mainInput.textChanged.connect(self.parseText)
         self.inputLayout.addWidget(self.mainInput)
+        self.statusBox = QtWidgets.QLabel()
+        self.inputLayout.addWidget(self.statusBox)
         self.mainLayout.addLayout(self.inputLayout)
 
         self.dayLayout = QtWidgets.QVBoxLayout()
@@ -85,6 +87,7 @@ class WHIDForm(QtWidgets.QDialog):
         if self.ignoreInputChange:
             self.ignoreInputChange = False
             return
+        self.setStatus('')
         self.processTimer.stop()
         now = time.time()
         text = self.mainInput.toPlainText()
@@ -92,6 +95,7 @@ class WHIDForm(QtWidgets.QDialog):
         root['text'] = '__root__'
         parents = [root]
         previous = None
+        number = 1
         for line in text.splitlines():
             new_entry = copy.deepcopy(base_entry)
             new_entry['text'] = line.lstrip('-')
@@ -106,12 +110,22 @@ class WHIDForm(QtWidgets.QDialog):
                     new_entry['complete_date'] = now
                     self.completed[new_entry['text']] = new_entry['complete_date']
             new_level = len(line) - len(new_entry['text'])
+            # They increased the nesting level by more than one, which breaks
+            # our tree.  Example problem text:
+            # foo
+            # --bar
+            if new_level > len(parents):
+                self.setStatus('<b style="color:red">Invalid entry tree at '
+                               'line %d</b>' % number)
+                # Bail out, we can't sanely parse this.
+                return
             if new_level > len(parents) - 1:
                 parents.append(previous)
-            if new_level < len(parents) - 1:
+            while new_level < len(parents) - 1:
                 parents.pop()
             parents[-1]['children'].append(new_entry)
             previous = new_entry
+            number += 1
         self.root_entry = root
         self.populateDay(now)
         self.processData()
@@ -200,6 +214,9 @@ class WHIDForm(QtWidgets.QDialog):
     def allPressed(self):
         self.allText.setHtml(self.getHistoryText())
         self.allDialog.show()
+
+    def setStatus(self, text):
+        self.statusBox.setText(text)
 
 
 def entryToText(entry, level=-1):
