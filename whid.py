@@ -185,12 +185,10 @@ class WHIDForm(QtWidgets.QDialog):
     def getHistoryText(self, skip=0):
         text = ''
         for date, entry in reversed(sorted(self.days.items())):
-            print skip, date, entry
             if entry['children'] and not skip:
                 text += '<h3>%s</h3>' % date
                 text += entryToText(entry)
             skip = max(skip - 1, 0)
-        print
         return text
 
     def save(self):
