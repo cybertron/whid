@@ -18,6 +18,7 @@ base_entry = {'text': '',
               }
 # How many elements of struct_time to consider when comparing dates
 date_resolution = 3
+# One hour
 process_interval = 3600000
 
 # Test values
@@ -38,6 +39,7 @@ class WHIDForm(QtWidgets.QDialog):
 
         # These are not
         self.ignoreInputChange = False
+        self.updateHistory = True
         self.processData()
         self.populateDay(time.time())
         self.processTimer = QtCore.QTimer()
@@ -130,6 +132,7 @@ class WHIDForm(QtWidgets.QDialog):
             # previous day then we can delete it.
             if local_date[0:date_resolution] != now[0:date_resolution]:
                 entry['delete'] = True
+                self.updateHistory = True
 
         for e in entry['children']:
             self.processEntry(e, now)
@@ -160,9 +163,10 @@ class WHIDForm(QtWidgets.QDialog):
         # Remove any entries that are not complete
         filterComplete(self.days[day_key])
         self.todayText.setHtml(entryToText(self.days[day_key]))
-        if len(self.days) > 0:
+        if len(self.days) > 0 and self.updateHistory:
             text = self.getHistoryText(1)
             self.historyText.setHtml(text)
+            self.updateHistory = False
 
     def getHistoryText(self, skip=0):
         text = ''
