@@ -72,7 +72,7 @@ class WHIDForm(QtWidgets.QDialog):
         self.mainLayout.addLayout(self.dayLayout)
 
         self.allDialog = QtWidgets.QDialog(self)
-        self.allDialog.setModal(True)
+        self.allDialog.setModal(False)
         self.allDialog.resize(600, 600)
         self.allDialog.setWindowTitle('All Days')
         self.allLayout = QtWidgets.QVBoxLayout(self.allDialog)
