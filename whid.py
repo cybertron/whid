@@ -221,6 +221,9 @@ def entryToText(entry, level=-1):
     text = ''
     if entry['text'] != '__root__':
         text = '-' * level + entry['text']
+        text = text.replace('&', '&amp;')
+        text = text.replace('<', '&lt;')
+        text = text.replace('>', '&gt;')
         if entry['text'].endswith('***'):
             text = '<b>' + text + '</b>'
         text += '<br>'
