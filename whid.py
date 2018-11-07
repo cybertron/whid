@@ -70,6 +70,7 @@ class WHIDForm(QtWidgets.QDialog):
         self.inputLayout = QtWidgets.QVBoxLayout()
         self.inputLayout.addWidget(QtWidgets.QLabel('In-Progress'))
         self.mainInput = QtWidgets.QTextEdit()
+        self.mainInput.setAcceptRichText(False)
         self.mainInput.textChanged.connect(self.parseText)
         self.inputLayout.addWidget(self.mainInput)
         self.statusBox = QtWidgets.QLabel()
