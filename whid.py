@@ -34,6 +34,7 @@ base_entry = {'text': '',
 date_resolution = 3
 # One hour
 process_interval = 3600000
+save_file_path = os.path.expanduser('~/.whid.json')
 
 # Test values
 #date_resolution = 5
@@ -210,13 +211,13 @@ class WHIDForm(QtWidgets.QDialog):
         output['root_entry'] = self.root_entry
         output['days'] = self.days
         output['completed'] = self.completed
-        with open(os.path.expanduser('~/.whid.json'), 'w') as f:
+        with open(save_file_path, 'w') as f:
             f.write(json.dumps(output))
 
     def load(self):
-        if not os.path.isfile(os.path.expanduser('~/.whid.json')):
+        if not os.path.isfile(save_file_path):
             return
-        with open(os.path.expanduser('~/.whid.json')) as f:
+        with open(save_file_path) as f:
             data = json.loads(f.read())
         self.root_entry = data['root_entry']
         self.days = data['days']
