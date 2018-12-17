@@ -180,6 +180,8 @@ class WHIDForm(QtWidgets.QDialog):
         plain_text = plain_text.replace('<b>', '')
         plain_text = plain_text.replace('</b>', '')
         plain_text = plain_text.replace('<br>', '\n')
+        # Undo the HTML replacements done by entryToText. We're plaintext so it's not needed.
+        plain_text = replaceSpecials(plain_text, inverse=True)
         if plain_text.rstrip() != current:
             self.ignoreInputChange = True
             self.mainInput.setPlainText(plain_text)
@@ -233,13 +235,20 @@ class WHIDForm(QtWidgets.QDialog):
         self.statusBox.setText(text)
 
 
+def replaceSpecials(text, inverse=False):
+    replacements = [('&', '&amp;'), ('<', '&lt;'), ('>', '&gt;')]
+    for r in replacements:
+        if inverse:
+            text = text.replace(r[1], r[0])
+        else:
+            text = text.replace(r[0], r[1])
+    return text
+
 def entryToText(entry, level=-1):
     text = ''
     if entry['text'] != '__root__':
         text = '-' * level + entry['text']
-        text = text.replace('&', '&amp;')
-        text = text.replace('<', '&lt;')
-        text = text.replace('>', '&gt;')
+        text = replaceSpecials(text)
         if entry['text'].endswith('***'):
             text = '<b>' + text + '</b>'
         text += '<br>'
