@@ -2,7 +2,11 @@ What Have I Done?!
 ------------------
 
 This is a simple application that adds some automation to the todo list
-workflow I have been using for a number of years.
+workflow I have been using for a number of years. In addition to this readme,
+I have a `blog post <http://blog.nemebean.com/content/what-have-i-done>`_
+that explains the origin of the tool.
+
+.. image:: http://blog.nemebean.com/sites/blog.nemebean.com/files/styles/large/public/field/image/whid.png?itok=UolwsdD3
 
 How it Works
 ============
